@@ -3,7 +3,7 @@
     internal class Program
     {
         static void Main(string[] args)
-        {
+        {           
             //Liste (wholeList) mit 10 Wörtern erstellen
 
             List<string> wordList = new List<string>() { "RAKETE", "PROGRAMMING", "CODING", "HONULULU", "MENTORING" };
@@ -102,13 +102,26 @@
                 if (counterMaxTrys == 0)
                 {
                     Console.WriteLine("\nSRY, YOU REACHED THE MAXIMUM TRY'S!!!");
-                    break;
-                }             
+                    Environment.Exit(0);
+                }                
             }
-
             //wenn alle Buchstaben gefunden wurden "GEWONNEN"
 
             Console.WriteLine("\nCONGRATULATION YOU FOUND THE WORD!!!");
+
+            Console.WriteLine("\nIF YOU WANT TO PLAY AGAIN, PRESS 'Y'");
+            string restartGame = Console.ReadLine().ToUpper();
+
+            if (restartGame == "Y")
+            {              
+                System.Diagnostics.Process.Start(@"C: \Users\Bimbi\source\repos\Hangman.exe");
+            }
+            else
+            {
+                Environment.Exit(0);
+            }
+            
         }
+
     }
 }
