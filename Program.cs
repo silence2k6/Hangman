@@ -4,30 +4,22 @@
     {
         static void Main(string[] args)
         {
-            string restartGame = "Y";
+            bool restartGame = true;
 
-            while (restartGame == "Y")
-            {
-                //Liste (wholeList) mit 10 Wörtern erstellen
-
+            while (restartGame == true)
+            {               
                 List<string> wordList = new List<string>() { "RAKETE", "PROGRAMMING", "CODING", "HONULULU", "MENTORING" };
                 List<char> userInputStorage = new List<char>();
-
-                //züfälliges Wort aus Liste auswählen und in einen String (randomWord)
-
+              
                 Random randomGenerator = new Random();
                 int choosenWord = randomGenerator.Next(wordList.Count);
                 string randomWord = wordList[choosenWord];
 
                 Console.WriteLine($"the random Word is {randomWord}");
 
-                //Länge von "randomWord" herausfinden
-
                 int length = randomWord.Length;
 
                 Console.WriteLine($"the word has {length} Letters");
-
-                //Array "unknownWord" erstellen (Länge = Anzahl der Buchstaben von "randomWord") und Plätze mit "_" befüllen
 
                 char[] unknownWord = new char[length];
 
@@ -37,21 +29,13 @@
                     Console.Write(unknownWord[pos]);
                 }
 
-                //Anzahl der Versuche definieren "counterMaximumTrys"
+                int remainingTries = 1;
 
-                int counterMaxTrys = 10;
+                string guessedWord = "";
 
-                //Auslöser für "Gewonnen" definieren
-
-                string finishingGame = "";
-
-                //while-Schleife erstellen und User schätzen lassen
-
-                while (finishingGame != randomWord)
+                while (guessedWord != randomWord)
                 {
-                    Console.Write($"\nTry to find the word (you still have {counterMaxTrys} Trys):\t");
-
-                    //Usereingabe auf korrekte Eingabe und erneute Eingabe eines bereits verwendeten Buchstaben überprüfen
+                    Console.Write($"\nTry to find the word (you still have {remainingTries} tries):\t");
 
                     bool validChar;
                     bool validLetter;
@@ -73,18 +57,14 @@
                     }
                     userInputStorage.Add(userInput);
 
-                    //Schätzung des Users durch "randomWord" laufen lassen und auf Gleichheit der Buchstaben vergleichen lassen
-
                     int startPosition = 0;
                     int foundPosition = randomWord.IndexOf(userInput, startPosition);
 
                     if (foundPosition == -1)
                     {
                         Console.WriteLine("\nLetter doesn't exists in the Word");
-                        counterMaxTrys--;
+                        remainingTries--;
                     }
-
-                    //wenn Gleicheit gefunden wird, selbige Position in "unknownWord" durch entsprechenden Buchstaben ersetzen (Achtung: bei mehreren gleichen Buchstaben alle gleichen Buchstaben ersetzen!!!)                             
 
                     else
                     {
@@ -99,29 +79,45 @@
                                 break;
                             }
                         }
-                        finishingGame = new string(unknownWord);
+                        guessedWord = new string(unknownWord);
                         Console.WriteLine(unknownWord);
                     }
 
-                    if (counterMaxTrys == 0)
+                    if (remainingTries == 0)
                     {
-                        Console.WriteLine("\nSRY, YOU REACHED THE MAXIMUM TRY'S!!!");
-                        Environment.Exit(0);
-                    }
+                        Console.WriteLine("\nSRY, YOU REACHED THE MAXIMUM TRIES!!!");
+                        break;
+                    }                   
                 }
-                //wenn alle Buchstaben gefunden wurden "GEWONNEN"
 
-                Console.WriteLine("\nCONGRATULATION YOU FOUND THE WORD!!!");
-
-                //User fragen ob er Spiel nochmals spielen möchte
-
-                Console.WriteLine("\nIF YOU WANT TO PLAY AGAIN, PRESS 'Y'");
-                restartGame = Console.ReadLine().ToUpper();
-                continue;
+                if (guessedWord == randomWord)
+                {
+                    Console.WriteLine("\nCONGRATULATION YOU FOUND THE WORD!!!");
+                    restartGame = Program.restartGame();
+                }
+                else
+                {
+                    restartGame = Program.restartGame();
+                }   
             }
 
             Console.WriteLine("THANKS FOR PLAYING");
-            Environment.Exit(0);
+        }
+
+        /// <summary>
+        /// Possibility for user to play again
+        /// </summary>
+        /// <returns>true(User wants to play again) or false (he doesn't)</returns>
+        static bool restartGame ()
+        {
+            Console.WriteLine("\nIF YOU WANT TO PLAY AGAIN, PRESS 'Y'");
+            string restart = Console.ReadLine().ToUpper();
+            bool playAgain = true;
+            if (restart != "Y")
+            {
+                playAgain = false;
+            }
+            return playAgain;
         }
 
     }
